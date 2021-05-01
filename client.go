@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"strconv"
 	"time"
 )
 
@@ -73,25 +74,25 @@ func (c *Client) Ping(ctx context.Context) (string, error) {
 //     content: The answer content for the record.
 //     ttl (optional): The time to live in seconds for the record. The minimum and the default is 300 seconds.
 //     prio (optional) The priority of the record for those that support it.
-func (c *Client) CreateRecord(ctx context.Context, domain string, record Record) (string, error) {
+func (c *Client) CreateRecord(ctx context.Context, domain string, record Record) (int, error) {
 	endpoint, err := c.BaseURL.Parse(path.Join(c.BaseURL.Path, "dns", "create", domain))
 	if err != nil {
-		return "", fmt.Errorf("failed to parse endpoint: %w", err)
+		return 0, fmt.Errorf("failed to parse endpoint: %w", err)
 	}
 
 	respBody, err := c.do(ctx, endpoint, record)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	createResp := createResponse{}
 	err = json.Unmarshal(respBody, &createResp)
 	if err != nil {
-		return "", fmt.Errorf("failed to unmarshal response: %w", err)
+		return 0, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
 	if createResp.Status.Status != statusSuccess {
-		return "", createResp.Status
+		return 0, createResp.Status
 	}
 
 	return createResp.ID, nil
@@ -104,8 +105,8 @@ func (c *Client) CreateRecord(ctx context.Context, domain string, record Record)
 //     content: The answer content for the record.
 //     ttl (optional): The time to live in seconds for the record. The minimum and the default is 300 seconds.
 //     prio (optional) The priority of the record for those that support it.
-func (c *Client) EditRecord(ctx context.Context, domain, id string, record Record) error {
-	endpoint, err := c.BaseURL.Parse(path.Join(c.BaseURL.Path, "dns", "edit", domain, id))
+func (c *Client) EditRecord(ctx context.Context, domain string, id int, record Record) error {
+	endpoint, err := c.BaseURL.Parse(path.Join(c.BaseURL.Path, "dns", "edit", domain, strconv.Itoa(id)))
 	if err != nil {
 		return fmt.Errorf("failed to parse endpoint: %w", err)
 	}
@@ -129,8 +130,8 @@ func (c *Client) EditRecord(ctx context.Context, domain, id string, record Recor
 }
 
 // DeleteRecord deletes a specific DNS record.
-func (c *Client) DeleteRecord(ctx context.Context, domain, id string) error {
-	endpoint, err := c.BaseURL.Parse(path.Join(c.BaseURL.Path, "dns", "delete", domain, id))
+func (c *Client) DeleteRecord(ctx context.Context, domain string, id int) error {
+	endpoint, err := c.BaseURL.Parse(path.Join(c.BaseURL.Path, "dns", "delete", domain, strconv.Itoa(id)))
 	if err != nil {
 		return fmt.Errorf("failed to parse endpoint: %w", err)
 	}

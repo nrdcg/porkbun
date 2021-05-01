@@ -62,7 +62,7 @@ type pingResponse struct {
 
 type createResponse struct {
 	Status
-	ID string `json:"id"`
+	ID int `json:"id"`
 }
 
 type retrieveResponse struct {

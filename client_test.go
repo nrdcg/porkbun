@@ -78,7 +78,7 @@ func TestClient_CreateRecord(t *testing.T) {
 	id, err := client.CreateRecord(context.Background(), "example.com", record)
 	require.NoError(t, err)
 
-	assert.Equal(t, "106926659", id)
+	assert.Equal(t, 106926659, id)
 }
 
 func TestClient_CreateRecord_error(t *testing.T) {
@@ -105,7 +105,7 @@ func TestClient_EditRecord(t *testing.T) {
 		Prio:    "1",
 	}
 
-	err := client.EditRecord(context.Background(), "example.com", "666", record)
+	err := client.EditRecord(context.Background(), "example.com", 666, record)
 	require.NoError(t, err)
 }
 
@@ -119,21 +119,21 @@ func TestClient_EditRecord_error(t *testing.T) {
 		Prio:    "1",
 	}
 
-	err := client.EditRecord(context.Background(), "example.com", "666", record)
+	err := client.EditRecord(context.Background(), "example.com", 666, record)
 	require.Error(t, err)
 }
 
 func TestClient_DeleteRecord(t *testing.T) {
 	client := setup(t, "/dns/delete/example.com/666", "edit")
 
-	err := client.DeleteRecord(context.Background(), "example.com", "666")
+	err := client.DeleteRecord(context.Background(), "example.com", 666)
 	require.NoError(t, err)
 }
 
 func TestClient_DeleteRecord_error(t *testing.T) {
 	client := setup(t, "/dns/delete/example.com/666", "error")
 
-	err := client.DeleteRecord(context.Background(), "example.com", "666")
+	err := client.DeleteRecord(context.Background(), "example.com", 666)
 	require.Error(t, err)
 }
 
