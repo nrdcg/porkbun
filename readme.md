@@ -10,7 +10,29 @@ porkbun is a Go client library for accessing the Porkbun API.
 
 ## Examples
 
-TODO
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/nrdcg/porkbun"
+)
+
+func main() {
+	client := porkbun.New("secret", "key")
+
+	ctx := context.Background()
+
+	yourIP, err := client.Ping(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(yourIP)
+}
+```
 
 ## API Documentation
 

@@ -1,0 +1,23 @@
+{
+  "status": "SUCCESS",
+  "records": [
+    {
+      "id": "106926652",
+      "name": "borseth.ink",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": "300",
+      "prio": "0",
+      "notes": ""
+    },
+    {
+      "id": "106926659",
+      "name": "www.borseth.ink",
+      "type": "A",
+      "content": "1.1.1.1",
+      "ttl": "300",
+      "prio": "0",
+      "notes": ""
+    }
+  ]
+}
