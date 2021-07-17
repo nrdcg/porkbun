@@ -49,6 +49,7 @@ linters:
     - maligned # deprecated
     - interfacer # deprecated
     - scopelint # deprecated
+    - golint # deprecated
     - sqlclosecheck # not relevant (SQL)
     - rowserrcheck # not relevant (SQL)
     - cyclop # duplicate of gocyclo
