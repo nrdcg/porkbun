@@ -44,6 +44,16 @@ func (a Status) Error() string {
 	return fmt.Sprintf("%s: %s", a.Status, a.Message)
 }
 
+type StatusError struct {
+	Status    int    `json:"status"`
+	Message   string `json:"message,omitempty"`
+	Retryable bool   `json:"retryable"`
+}
+
+func (a StatusError) Error() string {
+	return fmt.Sprintf("status: %d message: %s retryable: %t", a.Status, a.Message, a.Retryable)
+}
+
 // Record a DNS record.
 type Record struct {
 	ID      string `json:"id,omitempty"`
