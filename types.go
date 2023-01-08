@@ -45,12 +45,12 @@ func (a Status) Error() string {
 }
 
 type StatusError struct {
-	Status  int    `json:"status"`
+	Status  string `json:"status"`
 	Message string `json:"message,omitempty"`
 }
 
 func (a StatusError) Error() string {
-	return fmt.Sprintf("status: %d message: %s", a.Status, a.Message)
+	return fmt.Sprintf("status: %s message: %s", a.Status, a.Message)
 }
 
 // Record a DNS record.

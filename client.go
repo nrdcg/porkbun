@@ -61,7 +61,10 @@ func (c *Client) Ping(ctx context.Context) (string, error) {
 	}
 
 	if pingResp.Status.Status != statusSuccess {
-		return "", pingResp.Status
+		return "", &StatusError{
+			Status:  pingResp.Status.Status,
+			Message: pingResp.Message,
+		}
 	}
 
 	return pingResp.YourIP, nil
@@ -92,7 +95,10 @@ func (c *Client) CreateRecord(ctx context.Context, domain string, record Record)
 	}
 
 	if createResp.Status.Status != statusSuccess {
-		return 0, createResp.Status
+		return 0, &StatusError{
+			Status:  createResp.Status.Status,
+			Message: createResp.Message,
+		}
 	}
 
 	return createResp.ID, nil
@@ -123,7 +129,10 @@ func (c *Client) EditRecord(ctx context.Context, domain string, id int, record R
 	}
 
 	if statusResp.Status != statusSuccess {
-		return statusResp
+		return &StatusError{
+			Status:  statusResp.Status,
+			Message: statusResp.Message,
+		}
 	}
 
 	return nil
@@ -148,7 +157,10 @@ func (c *Client) DeleteRecord(ctx context.Context, domain string, id int) error 
 	}
 
 	if statusResp.Status != statusSuccess {
-		return statusResp
+		return &StatusError{
+			Status:  statusResp.Status,
+			Message: statusResp.Message,
+		}
 	}
 
 	return nil
@@ -173,7 +185,10 @@ func (c *Client) RetrieveRecords(ctx context.Context, domain string) ([]Record, 
 	}
 
 	if retrieveResp.Status.Status != statusSuccess {
-		return nil, retrieveResp.Status
+		return nil, &StatusError{
+			Status:  retrieveResp.Status.Status,
+			Message: retrieveResp.Message,
+		}
 	}
 
 	return retrieveResp.Records, nil
@@ -210,7 +225,7 @@ func (c *Client) do(ctx context.Context, endpoint *url.URL, apiRequest interface
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, StatusError{
-			Status:  resp.StatusCode,
+			Status:  fmt.Sprint(resp.StatusCode),
 			Message: string(respBody),
 		}
 	}
