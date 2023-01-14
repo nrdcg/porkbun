@@ -15,18 +15,18 @@ type authRequest struct {
 
 func (f authRequest) MarshalJSON() ([]byte, error) {
 	type clone authRequest
-	c := clone(f)
+	cloned := clone(f)
 
-	root, err := json.Marshal(c)
+	root, err := json.Marshal(cloned)
 	if err != nil {
 		return nil, err
 	}
 
-	if c.apiRequest == nil {
+	if cloned.apiRequest == nil {
 		return root, nil
 	}
 
-	embedded, err := json.Marshal(c.apiRequest)
+	embedded, err := json.Marshal(cloned.apiRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -40,10 +40,7 @@ type Status struct {
 	Message string `json:"message,omitempty"`
 }
 
-func (a Status) Error() string {
-	return fmt.Sprintf("%s: %s", a.Status, a.Message)
-}
-
+// StatusError is a custom error type for easier handling of Porkbun API Errors.
 type StatusError struct {
 	Status  string `json:"status"`
 	Message string `json:"message,omitempty"`
