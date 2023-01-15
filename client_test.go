@@ -22,26 +22,26 @@ func setup(t *testing.T, pattern, filename string) *Client {
 	server := httptest.NewServer(mux)
 	t.Cleanup(server.Close)
 
-	mux.HandleFunc(pattern, func(respw http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc(pattern, func(rw http.ResponseWriter, req *http.Request) {
 		if req.Method != http.MethodPost {
-			http.Error(respw, "invalid method: "+req.Method, http.StatusBadRequest)
+			http.Error(rw, "invalid method: "+req.Method, http.StatusBadRequest)
 			return
 		}
 
 		all, _ := io.ReadAll(req.Body)
 		if !strings.HasPrefix(string(all), `{"apikey":"key","secretapikey":"secret"`) {
-			http.Error(respw, `{"status": "ERROR","message": "invalid auth"}`, http.StatusOK)
+			http.Error(rw, `{"status": "ERROR","message": "invalid auth"}`, http.StatusOK)
 			return
 		}
 
 		data, err := os.ReadFile(fmt.Sprintf("./fixtures/%s.json", filename))
 		if err != nil {
-			http.Error(respw, err.Error(), http.StatusInternalServerError)
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		respw.Header().Set("Content-Type", "application/json")
-		_, _ = respw.Write(data)
+		rw.Header().Set("Content-Type", "application/json")
+		_, _ = rw.Write(data)
 	})
 
 	client := New("secret", "key")
@@ -179,5 +179,6 @@ func TestClient_ErrorStatus(t *testing.T) {
 	client := setup(t, "/dns/retrieve/example.com", "error503")
 	_, err := client.RetrieveRecords(context.Background(), "example.com")
 	assert.IsType(t, &StatusError{}, err)
-	assert.ErrorContains(t, err, "503 Service Temporarily Unavailable")
+	statusE := err.(*StatusError)
+	assert.Equal(t, "503", statusE.Status)
 }
