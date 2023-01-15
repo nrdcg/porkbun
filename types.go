@@ -44,7 +44,7 @@ func (a Status) Error() string {
 	return fmt.Sprintf("%s: %s", a.Status, a.Message)
 }
 
-// APIError the API error response.
+// APIError the API server error.
 type APIError struct {
 	StatusCode int    `json:"statusCode"`
 	Message    string `json:"message,omitempty"`
