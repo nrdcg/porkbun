@@ -44,6 +44,7 @@ func (a Status) Error() string {
 	return fmt.Sprintf("%s: %s", a.Status, a.Message)
 }
 
+// StatusError is a custom error type for easier handling of Porkbun API Errors.
 type StatusError struct {
 	Status  string `json:"status"`
 	Message string `json:"message,omitempty"`

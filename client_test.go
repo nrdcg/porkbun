@@ -177,8 +177,10 @@ func TestClient_RetrieveRecords_error(t *testing.T) {
 
 func TestClient_ErrorStatus(t *testing.T) {
 	client := setup(t, "/dns/retrieve/example.com", "error503")
+
 	_, err := client.RetrieveRecords(context.Background(), "example.com")
-	assert.IsType(t, &StatusError{}, err)
-	statusE := err.(*StatusError)
+
+	statusE := &StatusError{}
+	assert.ErrorAs(t, err, &statusE)
 	assert.Equal(t, "503", statusE.Status)
 }
