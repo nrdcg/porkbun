@@ -176,11 +176,20 @@ func TestClient_RetrieveRecords_error(t *testing.T) {
 }
 
 func TestClient_ErrorStatus(t *testing.T) {
-	client := setup(t, "/dns/retrieve/example.com", "error503")
+	mux := http.NewServeMux()
+	server := httptest.NewServer(mux)
+	t.Cleanup(server.Close)
+
+	mux.HandleFunc("/dns/retrieve/example.com", func(rw http.ResponseWriter, req *http.Request) {
+		rw.WriteHeader(http.StatusServiceUnavailable)
+	})
+
+	client := New("secret", "key")
+	client.BaseURL, _ = url.Parse(server.URL)
 
 	_, err := client.RetrieveRecords(context.Background(), "example.com")
 
-	statusE := &StatusError{}
+	statusE := &APIError{}
 	assert.ErrorAs(t, err, &statusE)
-	assert.Equal(t, "503", statusE.Status)
+	assert.Equal(t, http.StatusServiceUnavailable, statusE.StatusCode)
 }

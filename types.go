@@ -44,14 +44,14 @@ func (a Status) Error() string {
 	return fmt.Sprintf("%s: %s", a.Status, a.Message)
 }
 
-// StatusError is a custom error type for easier handling of Porkbun API Errors.
-type StatusError struct {
-	Status  string `json:"status"`
-	Message string `json:"message,omitempty"`
+// APIError the API error response.
+type APIError struct {
+	StatusCode int    `json:"statusCode"`
+	Message    string `json:"message,omitempty"`
 }
 
-func (a StatusError) Error() string {
-	return fmt.Sprintf("status: %s message: %s", a.Status, a.Message)
+func (a APIError) Error() string {
+	return fmt.Sprintf("status: %d message: %s", a.StatusCode, a.Message)
 }
 
 // Record a DNS record.
