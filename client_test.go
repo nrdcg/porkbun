@@ -138,6 +138,25 @@ func TestClient_DeleteRecord_error(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestClient_DeleteRecord_apiError(t *testing.T) {
+	mux := http.NewServeMux()
+	server := httptest.NewServer(mux)
+	t.Cleanup(server.Close)
+
+	mux.HandleFunc("/dns/delete/example.com/1", func(rw http.ResponseWriter, req *http.Request) {
+		rw.WriteHeader(http.StatusServiceUnavailable)
+	})
+
+	client := New("secret", "key")
+	client.BaseURL, _ = url.Parse(server.URL)
+
+	err := client.DeleteRecord(context.Background(), "example.com", 1)
+
+	statusE := &APIError{}
+	assert.ErrorAs(t, err, &statusE)
+	assert.Equal(t, http.StatusServiceUnavailable, statusE.StatusCode)
+}
+
 func TestClient_RetrieveRecords(t *testing.T) {
 	client := setup(t, "/dns/retrieve/example.com", "retrieve")
 
@@ -173,23 +192,4 @@ func TestClient_RetrieveRecords_error(t *testing.T) {
 
 	_, err := client.RetrieveRecords(context.Background(), "example.com")
 	require.Error(t, err)
-}
-
-func TestClient_ErrorStatus(t *testing.T) {
-	mux := http.NewServeMux()
-	server := httptest.NewServer(mux)
-	t.Cleanup(server.Close)
-
-	mux.HandleFunc("/dns/retrieve/example.com", func(rw http.ResponseWriter, req *http.Request) {
-		rw.WriteHeader(http.StatusServiceUnavailable)
-	})
-
-	client := New("secret", "key")
-	client.BaseURL, _ = url.Parse(server.URL)
-
-	_, err := client.RetrieveRecords(context.Background(), "example.com")
-
-	statusE := &APIError{}
-	assert.ErrorAs(t, err, &statusE)
-	assert.Equal(t, http.StatusServiceUnavailable, statusE.StatusCode)
 }
