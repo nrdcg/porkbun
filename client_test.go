@@ -3,10 +3,11 @@ package porkbun
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
@@ -27,13 +28,13 @@ func setup(t *testing.T, pattern, filename string) *Client {
 			return
 		}
 
-		all, _ := ioutil.ReadAll(req.Body)
+		all, _ := io.ReadAll(req.Body)
 		if !strings.HasPrefix(string(all), `{"apikey":"key","secretapikey":"secret"`) {
 			http.Error(rw, `{"status": "ERROR","message": "invalid auth"}`, http.StatusOK)
 			return
 		}
 
-		data, err := ioutil.ReadFile(fmt.Sprintf("./fixtures/%s.json", filename))
+		data, err := os.ReadFile(fmt.Sprintf("./fixtures/%s.json", filename))
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
