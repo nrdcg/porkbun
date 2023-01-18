@@ -209,7 +209,7 @@ func (c *Client) do(ctx context.Context, endpoint *url.URL, apiRequest interface
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, &APIError{
+		return nil, &ServerError{
 			StatusCode: resp.StatusCode,
 			Message:    string(respBody),
 		}

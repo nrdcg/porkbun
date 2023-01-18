@@ -152,7 +152,7 @@ func TestClient_DeleteRecord_apiError(t *testing.T) {
 
 	err := client.DeleteRecord(context.Background(), "example.com", 1)
 
-	statusE := &APIError{}
+	statusE := &ServerError{}
 	assert.ErrorAs(t, err, &statusE)
 	assert.Equal(t, http.StatusServiceUnavailable, statusE.StatusCode)
 }
