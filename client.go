@@ -209,7 +209,10 @@ func (c *Client) do(ctx context.Context, endpoint *url.URL, apiRequest interface
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%d: %s", resp.StatusCode, string(respBody))
+		return nil, &ServerError{
+			StatusCode: resp.StatusCode,
+			Message:    string(respBody),
+		}
 	}
 
 	return respBody, nil
