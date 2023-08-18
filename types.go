@@ -79,3 +79,14 @@ type retrieveResponse struct {
 	Status
 	Records []Record `json:"records"`
 }
+
+type Bundle struct {
+	IntermediateCertificate string `json:"intermediatecertificate"`
+	CertificateChain        string `json:"certificatechain"`
+	PrivateKey              string `json:"privatekey"`
+	PublicKey               string `json:"publickey"`
+}
+type bundleResponse struct {
+	Status
+	Bundle
+}

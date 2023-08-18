@@ -193,3 +193,26 @@ func TestClient_RetrieveRecords_error(t *testing.T) {
 	_, err := client.RetrieveRecords(context.Background(), "example.com")
 	require.Error(t, err)
 }
+
+func TestClient_RetrieveBundle(t *testing.T) {
+	client := setup(t, "/ssl/retrieve/example.com", "bundle")
+
+	bundle, err := client.RetrieveSSLBundle(context.Background(), "example.com")
+	require.NoError(t, err)
+
+	expected := Bundle{
+		IntermediateCertificate: "----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n",
+		CertificateChain:        "----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n\n----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n\n----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n",
+		PrivateKey:              "-----BEGIN PRIVATE KEY-----\n...-----END PRIVATE KEY-----\n",
+		PublicKey:               "-----BEGIN PUBLIC KEY-----\n...-----END PUBLIC KEY-----\n",
+	}
+
+	assert.Equal(t, expected, bundle)
+}
+func TestClient_RetrieveBundle_error(t *testing.T) {
+	client := setup(t, "/ssl/retrieve/example.com", "error")
+
+	_, err := client.RetrieveRecords(context.Background(), "example.com")
+	require.Error(t, err)
+
+}
