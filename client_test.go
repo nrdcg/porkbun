@@ -210,7 +210,7 @@ func TestClient_RetrieveSSLBundle(t *testing.T) {
 	assert.Equal(t, expected, bundle)
 }
 
-func TestClient_RetrieveBundle_error(t *testing.T) {
+func TestClient_RetrieveSSLBundle_error(t *testing.T) {
 	client := setup(t, "/ssl/retrieve/example.com", "error")
 
 	_, err := client.RetrieveRecords(context.Background(), "example.com")
