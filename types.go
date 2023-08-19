@@ -80,13 +80,15 @@ type retrieveResponse struct {
 	Records []Record `json:"records"`
 }
 
-type Bundle struct {
+// SSLBundle a  SSL certificate bundle.
+type SSLBundle struct {
 	IntermediateCertificate string `json:"intermediatecertificate"`
 	CertificateChain        string `json:"certificatechain"`
 	PrivateKey              string `json:"privatekey"`
 	PublicKey               string `json:"publickey"`
 }
-type bundleResponse struct {
+
+type sslBundleResponse struct {
 	Status
-	Bundle
+	SSLBundle
 }
