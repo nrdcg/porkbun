@@ -179,6 +179,31 @@ func (c *Client) RetrieveRecords(ctx context.Context, domain string) ([]Record, 
 	return retrieveResp.Records, nil
 }
 
+// RetrieveSSLBundle retrieve the SSL certificate bundle for the domain.
+func (c *Client) RetrieveSSLBundle(ctx context.Context, domain string) (SSLBundle, error) {
+	endpoint, err := c.BaseURL.Parse(path.Join(c.BaseURL.Path, "ssl", "retrieve", domain))
+	if err != nil {
+		return SSLBundle{}, fmt.Errorf("failed to parse endpoint: %w", err)
+	}
+
+	respBody, err := c.do(ctx, endpoint, nil)
+	if err != nil {
+		return SSLBundle{}, err
+	}
+
+	bundleResp := sslBundleResponse{}
+	err = json.Unmarshal(respBody, &bundleResp)
+	if err != nil {
+		return SSLBundle{}, fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+
+	if bundleResp.Status.Status != statusSuccess {
+		return SSLBundle{}, bundleResp.Status
+	}
+
+	return bundleResp.SSLBundle, nil
+}
+
 func (c *Client) do(ctx context.Context, endpoint *url.URL, apiRequest interface{}) ([]byte, error) {
 	request := authRequest{
 		APIKey:       c.apiKey,

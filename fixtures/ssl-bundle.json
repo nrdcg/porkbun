@@ -1,0 +1,7 @@
+{
+	"status": "SUCCESS",
+	"intermediatecertificate": "----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n",
+	"certificatechain": "----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n\n----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n\n----BEGIN CERTIFICATE-----\n...-----END CERTIFICATE-----\n",
+	"privatekey": "-----BEGIN PRIVATE KEY-----\n...-----END PRIVATE KEY-----\n",
+	"publickey": "-----BEGIN PUBLIC KEY-----\n...-----END PUBLIC KEY-----\n"
+}
