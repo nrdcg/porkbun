@@ -214,12 +214,21 @@ func (c *Client) do(ctx context.Context, endpoint *url.URL, apiRequest interface
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	switch resp.StatusCode {
+	case http.StatusOK:
+		return respBody, nil
+
+	case http.StatusServiceUnavailable:
+		// related to https://github.com/nrdcg/porkbun/issues/5
+		return nil, &ServerError{
+			StatusCode: resp.StatusCode,
+			Message:    http.StatusText(http.StatusServiceUnavailable),
+		}
+
+	default:
 		return nil, &ServerError{
 			StatusCode: resp.StatusCode,
 			Message:    string(respBody),
 		}
 	}
-
-	return respBody, nil
 }
