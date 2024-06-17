@@ -143,7 +143,7 @@ func TestClient_DeleteRecord_apiError(t *testing.T) {
 	server := httptest.NewServer(mux)
 	t.Cleanup(server.Close)
 
-	mux.HandleFunc("/dns/delete/example.com/1", func(rw http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc("/dns/delete/example.com/1", func(rw http.ResponseWriter, _ *http.Request) {
 		rw.WriteHeader(http.StatusServiceUnavailable)
 	})
 
