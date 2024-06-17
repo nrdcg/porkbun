@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-const defaultBaseURL = "https://porkbun.com/api/json/v3/"
+const defaultBaseURL = "https://api.porkbun.com/api/json/v3/"
 
 const statusSuccess = "SUCCESS"
 
