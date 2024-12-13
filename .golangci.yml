@@ -44,7 +44,7 @@ linters-settings:
 linters:
   enable-all: true
   disable:
-    - execinquery # deprecated
+    - exportloopref # deprecated
     - sqlclosecheck # not relevant (SQL)
     - rowserrcheck # not relevant (SQL)
     - cyclop # duplicate of gocyclo
@@ -52,7 +52,6 @@ linters:
     - dupl
     - wsl
     - nlreturn
-    - gomnd
     - mnd
     - err113
     - wrapcheck
@@ -79,7 +78,7 @@ issues:
       linters:
         - funlen
     - path: types.go
-      text: 'the type name `Status` should conform to the `XxxError` format'
+      text: 'the error type name `(Status|[a-z]+Response)` should conform to the `XxxError` format'
 
 output:
   show-stats: true
