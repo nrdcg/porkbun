@@ -31,13 +31,18 @@ type Client struct {
 
 // New creates a new Client.
 func New(secretAPIKey, apiKey string) *Client {
+	return NewWithTimeout(secretAPIKey, apiKey, 10*time.Second)
+}
+
+// NewWithTimeout creates a new Client with a timeout.
+func NewWithTimeout(secretAPIKey, apiKey string, timeout time.Duration) *Client {
 	baseURL, _ := url.Parse(defaultBaseURL)
 
 	return &Client{
 		secretAPIKey: secretAPIKey,
 		apiKey:       apiKey,
 		BaseURL:      baseURL,
-		HTTPClient:   &http.Client{Timeout: 10 * time.Second},
+		HTTPClient:   &http.Client{Timeout: timeout},
 	}
 }
 
