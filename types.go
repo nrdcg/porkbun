@@ -15,6 +15,7 @@ type authRequest struct {
 
 func (f authRequest) MarshalJSON() ([]byte, error) {
 	type clone authRequest
+
 	c := clone(f)
 
 	root, err := json.Marshal(c)

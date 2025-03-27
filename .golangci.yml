@@ -1,84 +1,84 @@
-run:
-  timeout: 5m
-
-linters-settings:
-  govet:
-    enable-all: true
-    disable:
-      - fieldalignment
-  gocyclo:
-    min-complexity: 15
-  goconst:
-    min-len: 5
-    min-occurrences: 3
-  misspell:
-    locale: US
-  funlen:
-    lines: -1
-    statements: 50
-  godox:
-    keywords:
-      - FIXME
-  gofumpt:
-    extra-rules: true
-  depguard:
-    rules:
-      main:
-        deny:
-          - pkg: "github.com/instana/testify"
-            desc: not allowed
-          - pkg: "github.com/pkg/errors"
-            desc: Should be replaced by standard lib errors package
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - style
-      - performance
-    disabled-checks:
-      - sloppyReassign
-      - rangeValCopy
-      - octalLiteral
-      - hugeParam
-      - paramTypeCombine # already handled by gofumpt.extra-rules
+version: "2"
 
 linters:
-  enable-all: true
+  default: all
   disable:
-    - exportloopref # deprecated
-    - sqlclosecheck # not relevant (SQL)
-    - rowserrcheck # not relevant (SQL)
+    - bodyclose # Too many false positives: https://github.com/timakin/bodyclose/issues/30
     - cyclop # duplicate of gocyclo
-    - lll
     - dupl
-    - wsl
-    - nlreturn
-    - mnd
     - err113
-    - wrapcheck
     - exhaustive
     - exhaustruct
-    - testpackage
-    - tparallel
+    - forcetypeassert
+    - lll
+    - mnd
+    - nlreturn
     - paralleltest
     - prealloc
-    - forcetypeassert
-    - bodyclose # Too many false positives: https://github.com/timakin/bodyclose/issues/30
+    - rowserrcheck # not relevant (SQL)
+    - sqlclosecheck # not relevant (SQL)
+    - testpackage
+    - tparallel
     - varnamelen
+    - wrapcheck
+
+  settings:
+    depguard:
+      rules:
+        main:
+          deny:
+            - pkg: github.com/instana/testify
+              desc: not allowed
+            - pkg: github.com/pkg/errors
+              desc: Should be replaced by standard lib errors package
+    funlen:
+      lines: -1
+      statements: 50
+    goconst:
+      min-len: 5
+      min-occurrences: 3
+    gocritic:
+      disabled-checks:
+        - sloppyReassign
+        - rangeValCopy
+        - octalLiteral
+        - hugeParam
+        - paramTypeCombine # already handled by gofumpt.extra-rules
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+    gocyclo:
+      min-complexity: 15
+    godox:
+      keywords:
+        - FIXME
+    govet:
+      disable:
+        - fieldalignment
+      enable-all: true
+    misspell:
+      locale: US
+
+  exclusions:
+    warn-unused: true
+    presets:
+      - comments
+    rules:
+      - linters:
+          - funlen
+        path: .*_test.go
+      - path: types.go
+        text: '(?i)the error type name .(Status|[a-z]+Response). should conform to the .XxxError. format'
 
 issues:
-  exclude-use-default: false
   max-issues-per-linter: 0
   max-same-issues: 0
-  exclude:
-    - 'ST1000: at least one file in a package should have a package comment'
-#    - 'G204: Subprocess launched with variable'
-#    - 'G304: Potential file inclusion via variable'
-  exclude-rules:
-    - path: .*_test.go
-      linters:
-        - funlen
-    - path: types.go
-      text: 'the error type name `(Status|[a-z]+Response)` should conform to the `XxxError` format'
 
-output:
-  show-stats: true
+formatters:
+  enable:
+    - gci
+    - gofumpt
+  settings:
+    gofumpt:
+      extra-rules: true

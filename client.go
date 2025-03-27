@@ -51,6 +51,7 @@ func (c *Client) Ping(ctx context.Context) (string, error) {
 	}
 
 	pingResp := pingResponse{}
+
 	err = json.Unmarshal(respBody, &pingResp)
 	if err != nil {
 		return "", fmt.Errorf("failed to unmarshal response: %w", err)
@@ -79,6 +80,7 @@ func (c *Client) CreateRecord(ctx context.Context, domain string, record Record)
 	}
 
 	createResp := createResponse{}
+
 	err = json.Unmarshal(respBody, &createResp)
 	if err != nil {
 		return 0, fmt.Errorf("failed to unmarshal response: %w", err)
@@ -107,6 +109,7 @@ func (c *Client) EditRecord(ctx context.Context, domain string, id int, record R
 	}
 
 	statusResp := Status{}
+
 	err = json.Unmarshal(respBody, &statusResp)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
@@ -129,6 +132,7 @@ func (c *Client) DeleteRecord(ctx context.Context, domain string, id int) error 
 	}
 
 	statusResp := Status{}
+
 	err = json.Unmarshal(respBody, &statusResp)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal response: %w", err)
@@ -151,6 +155,7 @@ func (c *Client) RetrieveRecords(ctx context.Context, domain string) ([]Record, 
 	}
 
 	retrieveResp := retrieveResponse{}
+
 	err = json.Unmarshal(respBody, &retrieveResp)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
@@ -173,6 +178,7 @@ func (c *Client) RetrieveSSLBundle(ctx context.Context, domain string) (SSLBundl
 	}
 
 	bundleResp := sslBundleResponse{}
+
 	err = json.Unmarshal(respBody, &bundleResp)
 	if err != nil {
 		return SSLBundle{}, fmt.Errorf("failed to unmarshal response: %w", err)
