@@ -191,7 +191,7 @@ func (c *Client) RetrieveSSLBundle(ctx context.Context, domain string) (SSLBundl
 	return bundleResp.SSLBundle, nil
 }
 
-func (c *Client) do(ctx context.Context, endpoint *url.URL, apiRequest interface{}) ([]byte, error) {
+func (c *Client) do(ctx context.Context, endpoint *url.URL, apiRequest any) ([]byte, error) {
 	request := authRequest{
 		APIKey:       c.apiKey,
 		SecretAPIKey: c.secretAPIKey,

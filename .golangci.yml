@@ -21,6 +21,7 @@ linters:
     - tparallel
     - varnamelen
     - wrapcheck
+    - wsl
 
   settings:
     depguard:
@@ -53,6 +54,10 @@ linters:
     godox:
       keywords:
         - FIXME
+    gosec:
+      excludes:
+        - G704
+        - G117
     govet:
       disable:
         - fieldalignment

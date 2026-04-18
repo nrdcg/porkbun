@@ -5,12 +5,13 @@ import (
 	"fmt"
 )
 
-type apiRequest interface{}
+type apiRequest any
 
 type authRequest struct {
+	apiRequest
+
 	APIKey       string `json:"apikey"`
 	SecretAPIKey string `json:"secretapikey"`
-	apiRequest
 }
 
 func (f authRequest) MarshalJSON() ([]byte, error) {
@@ -68,16 +69,19 @@ type Record struct {
 
 type pingResponse struct {
 	Status
+
 	YourIP string `json:"yourIp"`
 }
 
 type createResponse struct {
 	Status
+
 	ID int `json:"id"`
 }
 
 type retrieveResponse struct {
 	Status
+
 	Records []Record `json:"records"`
 }
 
