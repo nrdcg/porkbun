@@ -9,7 +9,9 @@ linters:
     - err113
     - exhaustive
     - exhaustruct
+    - exhaustruct_v5
     - forcetypeassert
+    - gomodguard
     - lll
     - mnd
     - nlreturn
@@ -72,6 +74,7 @@ linters:
     rules:
       - linters:
           - funlen
+          - goconst
         path: .*_test.go
       - path: types.go
         text: '(?i)the error type name .(Status|[a-z]+Response). should conform to the .XxxError. format'
@@ -86,4 +89,6 @@ formatters:
     - gofumpt
   settings:
     gofumpt:
-      extra-rules: true
+      extra:
+        group-params: true
+        clothe-returns: true
